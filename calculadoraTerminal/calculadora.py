@@ -31,7 +31,6 @@ def main():
         if opcao == 5:
             print("Saindo..")
             break
-            a
         valorA = int(input("Digite o valor de a:"))
         valorB = int(input("Digite o valor de b:"))
 
