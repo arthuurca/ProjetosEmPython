@@ -23,19 +23,47 @@ def iniciar_jogo(vs_cpu = False):
     frame = ctk.CTkFrame(janela) #cria um conteiner
     frame.pack(pady=20) #faz este conteiner visivel
 
-    for i in range(3):
+    for i in range(3):#limita a criação de linhas em 3
         linha = []
-        for j in range(3):
+        for j in range(3): #limita a criação de colunas para 3
             indice = i * 3 + j #forma para localizar posição dentro do tabuleiro
             botao = ctk.CTkButton(frame, text="", width= 100, height=100, font=("Arial", 24, "bold"),
             command= lambda idx=indice: jogar(idx)) #atribui um indice para o botao a ser clicado, jogara naquele indice especificado
             botao.grid(row=i, column =j, padx=5, pady=5)
-            linha.append(botao)
-        tabuleiro.append(linha)
+            linha.append(botao) #coloca o botao na linha do indice
+        tabuleiro.append(linha) #coloca a linha naquele indice dentro do tabuleiro
 
     ctk.CTkButton(janela, text="Voltar ao menu", command=abre_menu).pack(pady=10)
 
-def jogar():
+def jogar(indice):
+    global jogador_atual
+
+    if estado[indice] != "":
+        return
+
+    estado[indice] = jogador_atual
+    linha, coluna = divmod(indice, 3) #retorna a linha e a coluna divmod faz a divisao dos 2 valores (divisao inteira, resto)
+    tabuleiro[linha][coluna].configure(text=jogador_atual)#atribui o texto de jogador atual no botão
+
+    if verificar_vitoria(jogador_atual):
+        mostrar_resultado(f"{jogador_atual} venceu!")
+        return
+    elif "" not in estado:
+        mostrar_resultado(f"Empate!")
+        return
+
+    jogador_atual = "O" if jogador_atual == "X" else "X"
+
+    if modo_cpu and jogador_atual == "O": #verifica se esta em modoCpu e se e a vez da cpu
+        janela.after(500, jogada_cpu)
+
+def mostrar_resultado():
+    return
+
+def jogada_cpu():
+    return
+    
+def verificar_vitoria():
     return
 
 def abre_menu():
