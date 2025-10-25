@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import random
 
 janela = ctk.CTk()
 janela.title("Jogo da Velha")
@@ -46,7 +47,7 @@ def jogar(indice):
     tabuleiro[linha][coluna].configure(text=jogador_atual)#atribui o texto de jogador atual no botão
 
     if verificar_vitoria(jogador_atual):
-        mostrar_resultado(f"{jogador_atual} venceu!")
+        mostrar_resultado(f"'{jogador_atual}' venceu!")
         return
     elif "" not in estado:
         mostrar_resultado(f"Empate!")
@@ -57,14 +58,29 @@ def jogar(indice):
     if modo_cpu and jogador_atual == "O": #verifica se esta em modoCpu e se e a vez da cpu
         janela.after(500, jogada_cpu)
 
-def mostrar_resultado():
-    return
+def mostrar_resultado(texto):
+    limparTela()
+    ctk.CTkLabel(janela, text=texto, font=("Arial", 24, "bold")).pack(pady=30)
+    ctk.CTkButton(janela, text="Jogar novamente", command=lambda: iniciar_jogo(vs_cpu=modo_cpu)).pack(pady=10)
+    ctk.CTkButton(janela, text="Voltar ao menu", command=abre_menu).pack(pady=10)
 
 def jogada_cpu():
-    return
+    global jogador_atual
+    posicoes_vazias = [i for i, v in enumerate(estado) if v == ""]#analisa o indice e o valor do estado e caso seja" ele atribui a variavel
+    if not posicoes_vazias:
+        return
+    escolha = random.choice(posicoes_vazias)
+    jogar(escolha)
     
-def verificar_vitoria():
-    return
+def verificar_vitoria(simbolo):
+    combinacoes = [[0, 1, 2], [3,4,5], [6, 7, 8],
+                   [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]
+                   
+                   ]
+    for c in combinacoes: #verifica canda i de combinacoes se é igual "X" ou "O"
+        if(estado[c[0]])== estado[c[1]] == estado[c[2]] == simbolo:
+            return True
+    return False
 
 def abre_menu():
     limparTela()
@@ -74,7 +90,7 @@ def abre_menu():
     botao1x1= ctk.CTkButton(janela, text="1x1", font=("Arial",14), command= lambda: iniciar_jogo(vs_cpu=False))
     botao1x1.pack(pady=10)
 
-    botaoCpu = ctk.CTkButton(janela, text="1xCpu", font=("Arial",14), command=lambda: iniciar_jogo(vs_cpu=False))
+    botaoCpu = ctk.CTkButton(janela, text="1xCpu", font=("Arial",14), command=lambda: iniciar_jogo(vs_cpu=True))
     botaoCpu.pack(pady=10)
 
 
